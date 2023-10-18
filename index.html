@@ -127,6 +127,11 @@
             download_manual(decodedText);
             $("#reader").hide();
             $(".page_download").show();
+            html5QrCode.stop().then((ignore) => {
+                // QR Code scanning is stopped.
+            }).catch((err) => {
+                // Stop failed, handle it.
+            });
         }
 
         function onScanFailure(error) {
@@ -172,6 +177,11 @@
             $("#reader").hide();
             $("#role_id").html(0);
             $("#station_id").html(0);
+            html5QrCode.stop().then((ignore) => {
+                // QR Code scanning is stopped.
+            }).catch((err) => {
+                // Stop failed, handle it.
+            });
         }
 
 
@@ -264,7 +274,7 @@
 
             //const fileUrl = "https://drive.google.com/file/d/10SAuu2GckkeJBGFc--h0le6nP0yX-8WT/view?usp=drive_link";
 
-            window.location.href = fileUrl;
+            window.location = fileUrl;
 
             // Use the fetch API to make a GET request
             //window.alert("Download should have been executed 3" + "This is the filreUrl: " + fileUrl + " Test 2");
