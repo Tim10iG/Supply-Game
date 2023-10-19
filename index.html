@@ -70,6 +70,12 @@
                                                         <div>
                                                             <button
                                                                 class="btn btn-primary btn-block supplier page_download"
+                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;" id="download_button"
+                                                                onclick="manual_download()">Download not starting?</button>
+                                                        </div>
+                                                        <div>
+                                                            <button
+                                                                class="btn btn-primary btn-block supplier page_download"
                                                                 style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;"
                                                                 onclick="qr_code()">Scan new QR-Code</button>
                                                         </div>
@@ -104,6 +110,7 @@
     <div style="display: none">
         <p id="role_id">0</p>
         <p id="station_id">0</p>
+        <p id="download_url">0</p>
     </div>
 
 
@@ -185,6 +192,11 @@
             });
         }
 
+        function manual_download() {
+            var url = document.getElementById("download_url").innerHTML;
+            //window.alert("This is url: " + url);
+            window.location = url;
+        }
 
         function download_manual(truck_code) {
             // URL of the file you want to download
@@ -230,7 +242,8 @@
                             switch (relevant_truck_code[3]) {
                                 case "F":
                                     //window.alert("Download should have been executed 1");
-                                    fileUrl = "https://drive.google.com/uc?export=download&id=1px13P1cITtjTb6nO_F72cidNY3NmqLNe";
+                                    //fileUrl = "https://drive.google.com/uc?export=download&id=1px13P1cITtjTb6nO_F72cidNY3NmqLNe";
+                                    fileUrl = "https://bwsyncandshare.kit.edu/s/NqEgXFZeLyb2M5K/download";
                                     //window.alert("Download should have been executed 2");
                                     break;
                                 case "N":
@@ -274,7 +287,7 @@
             }*/
 
             //const fileUrl = "https://drive.google.com/file/d/10SAuu2GckkeJBGFc--h0le6nP0yX-8WT/view?usp=drive_link";
-
+            $("#download_url").html(fileUrl);
             window.location = fileUrl;
 
             // Use the fetch API to make a GET request
