@@ -64,14 +64,43 @@
                                                                 style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;">Transmission
                                                                 Logistics</button>
                                                         </div>
-                                                        <div>
+                                                        <div class="scan_page">
                                                             <div id="reader" style="display: none;" width="600px"></div>
-                                                        </div>
-                                                        <div>
+                                                            <div class="form-group scan_page" style="display: none;">
+                                                                <label for="codeInput"
+                                                                    style="display: block; margin-bottom: 4px; font-size: 12px; color: rgba(55, 53, 47, 0.65);">Enter
+                                                                    Code:</label>
+                                                                <input type="text" class="form-control" id="codeInput"
+                                                                    placeholder="L-S2SF4-ACT-BFF-3">
+                                                            </div>
+                                                            <button class="btn btn-primary btn-block supplier scan_page"
+                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;"
+                                                                disabled id="download_button"
+                                                                onclick="manual_download()">Download Manual</button>
+                                                            <script>
+                                                            // Get references to the text field and button
+                                                                var textField = document.getElementById("codeInput");
+                                                                var button = document.getElementById("download_button");
+
+                                                                // Add an event listener to the text field
+                                                                textField.addEventListener("input", function () {
+                                                                    // Check if the text field is empty
+                                                                    if (textField.value === "") {
+                                                                        // If it's empty, disable the button
+                                                                        button.disabled = true;
+                                                                    } else {
+                                                                        // If it's not empty, enable the button
+                                                                        button.disabled = false;
+                                                                    }
+                                                                });
+                                                            </script>
+
                                                             <button
                                                                 class="btn btn-primary btn-block supplier page_download"
-                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;" id="download_button"
-                                                                onclick="manual_download()">Download not starting?</button>
+                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;"
+                                                                id="download_button"
+                                                                onclick="manual_download()">Download not
+                                                                starting?</button>
                                                         </div>
                                                         <div>
                                                             <button
@@ -130,15 +159,15 @@
     <script>function onScanSuccess(decodedText, decodedResult) {
             // handle the scanned code as you like, for example:
 
-            $("#instructions").html("Your download should start shortly");
-            download_manual(decodedText);
-            $("#reader").hide();
-            $(".page_download").show();
-            html5QrCode.stop().then((ignore) => {
-                // QR Code scanning is stopped.
-            }).catch((err) => {
-                // Stop failed, handle it.
-            });
+            var textField = document.getElementById("codeInput");
+            // Get the text you want to insert
+            var textToInsert = decodedText;
+
+            // Set the value of the text field to the desired text
+            textField.value = textToInsert;
+
+            var button = document.getElementById("download_button");
+            button.disabled = false;
         }
 
         function onScanFailure(error) {
@@ -169,6 +198,7 @@
             $("#instructions").html("Scan the QR-Code on the workorder");
             $(".page_sup").hide();
             $("#reader").show();
+            $(".scan_page").show();
             $(".page_download").hide();
             $(".change_role").show();
             $("#station_id").html(1);
@@ -180,6 +210,7 @@
             $(".hide").show();
             $(".page_sup").hide();
             $(".change_role").hide();
+            $(".scan_page").hide();
             $(".page_download").hide();
             $("#reader").hide();
             $("#role_id").html(0);
@@ -193,9 +224,17 @@
         }
 
         function manual_download() {
-            var url = document.getElementById("download_url").innerHTML;
-            //window.alert("This is url: " + url);
-            window.location = url;
+            // Get a reference to the text field
+            var textField = document.getElementById("codeInput");
+
+            // Get the text from the text field
+            var text = textField.value;
+
+            $("#instructions").html("Your download should start shortly");
+            download_manual(text);
+            $("#reader").hide();
+            $(".scan_page").hide();
+            $(".page_download").show();
         }
 
         function download_manual(truck_code) {
@@ -277,7 +316,8 @@
                             break;
                     }
                     break;
-
+                default:
+                    fileUrl = "https://tim10ig.github.io/Supply-Game/";
             }
 
             /*switch(relevant_truck_code) {
