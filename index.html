@@ -46,7 +46,7 @@
                                                                 style="font-size: 14px; font-weight: 500;margin-top: 16px;">Production</button>
                                                             <button
                                                                 class="btn btn-primary btn-block internal_logistics page1"
-                                                                disabled
+                                                                onclick="int_log()"
                                                                 style="font-size: 14px; font-weight: 500;margin-top: 16px;">Internal
                                                                 Logistics</button>
                                                         </div>
@@ -64,6 +64,22 @@
                                                                 style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;">Transmission
                                                                 Logistics</button>
                                                         </div>
+                                                        <div>
+
+                                                            <button
+                                                                class="btn btn-primary btn-block production page_log"
+                                                                disabled
+                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;">Right
+                                                                Frame Rail</button>
+                                                            <button
+                                                                class="btn btn-primary btn-block internal_logistics page_log"
+                                                                disabled
+                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;">Left
+                                                                Frame Rail</button>
+                                                            <button class="btn btn-primary btn-block supplier page_log"
+                                                                style="display: none; font-size: 14px; font-weight: 500;margin-top: 16px;"
+                                                                onclick="qr_code()">Cab Subset</button>
+                                                        </div>
                                                         <div class="scan_page">
                                                             <div id="reader" style="display: none;" width="600px"></div>
                                                             <div class="form-group scan_page" style="display: none;">
@@ -78,7 +94,7 @@
                                                                 disabled id="download_button"
                                                                 onclick="manual_download()">Download Manual</button>
                                                             <script>
-                                                            // Get references to the text field and button
+                                                                // Get references to the text field and button
                                                                 var textField = document.getElementById("codeInput");
                                                                 var button = document.getElementById("download_button");
 
@@ -194,9 +210,19 @@
             $("#role_id").html(1);
         }
 
+        function int_log() {
+            $(".page1").hide();
+            $("#two").hide();
+            //window.alert("This works");
+            $(".page_log").show();
+            $(".change_role").show();
+            $("#role_id").html(3);
+        }
+
         function qr_code() {
             $("#instructions").html("Scan the QR-Code on the workorder");
             $(".page_sup").hide();
+            $(".page_log").hide();
             $("#reader").show();
             $(".scan_page").show();
             $(".page_download").hide();
@@ -240,85 +266,91 @@
         function download_manual(truck_code) {
             // URL of the file you want to download
             var fileUrl = "";
+            var role_id = document.getElementById("role_id").innerHTML;
             //window.alert(`Yoyo = ${truck_code}`);
 
-            let relevant_truck_code = truck_code.substr(2, 5);
-
-            //window.alert(`Yoyo2 = ${relevant_truck_code}`)
-
-            switch (relevant_truck_code[0]) {
-                case "F":
-                    switch (relevant_truck_code[2]) {
-                        case "R":
-                            fileUrl = "https://bwsyncandshare.kit.edu/s/FKekonkFeSTQdK3/download";
-                            break;
-                        default:
-                            fileUrl = "https://bwsyncandshare.kit.edu/s/sdazwxJPHtgGzgN/download";
-                    }
-                    break;
-                case "O":
-                    switch (relevant_truck_code[2]) {
-                        case "D":
-                            fileUrl = "https://bwsyncandshare.kit.edu/s/Db7ZEeCqH8kWmrP/download";
-                            break;
-                        default:
-                            fileUrl = "https://bwsyncandshare.kit.edu/s/eNzHDqxazS5ZRmz/download";
-                    }
-                    break;
-                case "S":
-                    switch (relevant_truck_code[2]) {
-                        case "L":
-                            switch (relevant_truck_code[3]) {
-                                case "F":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/JDyeqoybzSYjBEQ/download";
-                                    break;
-                                case "N":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/PLYSpKrda5Rjo7z/download";
-                                    break;
-                            }
-                            break;
-                        case "S":
-                            switch (relevant_truck_code[3]) {
-                                case "F":
-                                    //window.alert("Download should have been executed 1");
-                                    //fileUrl = "https://drive.google.com/uc?export=download&id=1px13P1cITtjTb6nO_F72cidNY3NmqLNe";
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/NqEgXFZeLyb2M5K/download";
-                                    //window.alert("Download should have been executed 2");
-                                    break;
-                                case "N":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/FLyFnb98Da9CX7z/download";
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
-                case "Y":
-                    switch (relevant_truck_code[2]) {
-                        case "L":
-                            switch (relevant_truck_code[3]) {
-                                case "F":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/A6BWegpyGgy6MG9/download";
-                                    break;
-                                case "N":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/DZiFrHG7MmT4bt5/download";
-                                    break;
-                            }
-                            break;
-                        case "S":
-                            switch (relevant_truck_code[3]) {
-                                case "F":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/RPLCfAZ8ybg6WC7/download";
-                                    break;
-                                case "N":
-                                    fileUrl = "https://bwsyncandshare.kit.edu/s/eTRJ52YRq3fYr9H/download";
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
-                default:
-                    fileUrl = "https://tim10ig.github.io/Supply-Game/";
+            if (role_id == 3) {
+                switch (truck_code[0]) {
+                    
+                }
+            } else {
+                let relevant_truck_code = truck_code.substr(2, 5);
+                switch (relevant_truck_code[0]) {
+                    case "F":
+                        switch (relevant_truck_code[2]) {
+                            case "R":
+                                fileUrl = "https://bwsyncandshare.kit.edu/s/FKekonkFeSTQdK3/download";
+                                break;
+                            default:
+                                fileUrl = "https://bwsyncandshare.kit.edu/s/sdazwxJPHtgGzgN/download";
+                        }
+                        break;
+                    case "O":
+                        switch (relevant_truck_code[2]) {
+                            case "D":
+                                fileUrl = "https://bwsyncandshare.kit.edu/s/Db7ZEeCqH8kWmrP/download";
+                                break;
+                            default:
+                                fileUrl = "https://bwsyncandshare.kit.edu/s/eNzHDqxazS5ZRmz/download";
+                        }
+                        break;
+                    case "S":
+                        switch (relevant_truck_code[2]) {
+                            case "L":
+                                switch (relevant_truck_code[3]) {
+                                    case "F":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/JDyeqoybzSYjBEQ/download";
+                                        break;
+                                    case "N":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/PLYSpKrda5Rjo7z/download";
+                                        break;
+                                }
+                                break;
+                            case "S":
+                                switch (relevant_truck_code[3]) {
+                                    case "F":
+                                        //window.alert("Download should have been executed 1");
+                                        //fileUrl = "https://drive.google.com/uc?export=download&id=1px13P1cITtjTb6nO_F72cidNY3NmqLNe";
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/NqEgXFZeLyb2M5K/download";
+                                        //window.alert("Download should have been executed 2");
+                                        break;
+                                    case "N":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/FLyFnb98Da9CX7z/download";
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case "Y":
+                        switch (relevant_truck_code[2]) {
+                            case "L":
+                                switch (relevant_truck_code[3]) {
+                                    case "F":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/A6BWegpyGgy6MG9/download";
+                                        break;
+                                    case "N":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/DZiFrHG7MmT4bt5/download";
+                                        break;
+                                }
+                                break;
+                            case "S":
+                                switch (relevant_truck_code[3]) {
+                                    case "F":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/RPLCfAZ8ybg6WC7/download";
+                                        break;
+                                    case "N":
+                                        fileUrl = "https://bwsyncandshare.kit.edu/s/eTRJ52YRq3fYr9H/download";
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    default:
+                        fileUrl = "https://tim10ig.github.io/Supply-Game/";
+                }
             }
+
+
 
             /*switch(relevant_truck_code) {
                 case "L-S2SF4-ACT-BFF-4":
